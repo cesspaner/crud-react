@@ -1,5 +1,5 @@
 import React, {useState} from "react"
-import {isEmpty} from 'lodash'
+import {isEmpty, size} from 'lodash'
 import shortid from 'shortid'
 
 
@@ -12,18 +12,24 @@ function App() {
   const addTask =(e)=>{
     e.preventDefault()
     if (isEmpty(task)){
-    console.log(" valido estado no ingreso data")
-    return
-    }
-    const newTask = {
-      id: shortid.generate(),
-      name : task 
-    }
-   
-    setTasks([...tasks, newTask])
-   console.log("ok Ingreso datos")
-   setTask("")
+        console.log(" valido estado no ingreso data")
+        return
+        }
+        const newTask = {
+          id: shortid.generate(),
+          name : task 
+        }
+      
+        setTasks([...tasks, newTask])
+        console.log("ok Ingreso datos")
+        setTask("")
   }
+
+  const deletetaks=(id)=>{
+   const filteredTasks = tasks.filter(task => task.id !== id)
+   setTasks(filteredTasks)
+  }
+
   return (
   <div className="container mt-5">
     <h1>Registro de actividades</h1>
@@ -32,17 +38,31 @@ function App() {
 
         <div className="col-8">
          <h4 className="text-center"> Lista de actividades</h4>
+         {
+          size(tasks) == 0 ? (
+            <h6 className="text-center" >Aun! , no hay actividades</h6>
+          ) :(
           <ul className="list-group"> 
             {
               tasks.map((task)=>(
                 <li className="list-group-item" key={task.id}>
-                <span className="lead"> {task.name} </span>
-                <button className="btn btn-danger btn-sm float-right mx-2">Eliminar</button>
-                <button className="btn btn-success btn-sm float-right">Editar</button>
+                 <span className="lead"> {task.name} </span>
+                    <button 
+                    className="btn btn-danger btn-sm float-right mx-2"
+                    onClick= {()=>{ deletetaks(task.id) }}
+                    >
+                      Eliminar
+                    </button>
+                    <button 
+                    className="btn btn-success btn-sm float-right"
+                    >
+                      Editar
+                    </button>
                 </li>
             ))
             }
-          </ul>
+           </ul>
+           )}
         </div>
 
         <div className="col-4">
